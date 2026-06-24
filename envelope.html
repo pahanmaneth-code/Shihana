@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Envelope Animation</title>
+    <!-- Google Fonts for modern, premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #3c2422;
+            overflow: hidden;
+        }
+
+        /* --- ENVELOPE WRAPPER & CONTAINER --- */
+        .envelope-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #3c2422;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 2000px; /* Essential for smooth 3D depth */
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        .envelope-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            transform-style: preserve-3d;
+        }
+
+        /* --- ENVELOPE IMAGES (BASE & LID) --- */
+        .envelope-base,
+        .envelope-lid,
+        .envelope-lid-shadow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+        }
+
+        /* Base image sits at the back layer */
+        .envelope-base {
+            z-index: 1;
+            transform: translateZ(-2px); 
+        }
+
+        /* --- THE SHADOW LAYER (CAST ON THE BASE) --- */
+        .lid-shadow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2; /* Between base (1) and lid (3) */
+            transform-origin: 50% 0%;
+            transform-style: preserve-3d;
+            transform: translateZ(-1px); /* Flat, just in front of base */
+            pointer-events: none;
+        }
+
+        .envelope-lid-shadow {
+            pointer-events: none;
+            
+            /* Realistic blending with the base card texture */
+            mix-blend-mode: multiply;
+            
+            /* Subtle initial crease shadow when closed */
+            opacity: 0.12;
+            filter: brightness(0) blur(2px);
+            
+            transform-origin: 50% 0%;
+            transform: translateY(0px) scaleY(1);
+            
+            /* Synchronized transition with the lid container */
+            transition: transform 2.8s cubic-bezier(0.22, 1, 0.36, 1),
+                        filter 2.8s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 2.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* --- THE ROTATING LID LAYER --- */
+        .lid-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            transform-origin: 50% 0%; /* Keeps the rotation hinge exactly at the top edge */
+            transform-style: preserve-3d;
+            transform: translateZ(2px);
+            
+            /* Slower, ultra-smooth cubic-bezier transition for an elegant look */
+            transition: transform 7.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .envelope-lid {
+            width: 100%;
+            pointer-events: none;
+        }
+
+        /* --- ANIMATION TRIGGER STATE --- */
+        
+        /* Rotates slightly outward - lower angle (15deg) for a premium, professional peel effect */
+        .envelope-wrapper.open .lid-container {
+            transform: translateZ(8px) rotateX(15deg); 
+        }
+
+        /* Shadow expands downwards, blurs, and deepens to simulate distance from base */
+        .envelope-wrapper.open .envelope-lid-shadow {
+            opacity: 0.38; /* Soft deep shadow contrast */
+            filter: brightness(0) blur(18px); /* Soft expanded edge */
+            transform: translateY(16px) scaleY(1.03); /* Shifting and stretching downwards as flap lifts */
+        }
+
+        /* --- HINT TEXT LAYER (OPTIONAL) --- */
+        .hint-text {
+            position: absolute;
+            bottom: 60px;
+            color: #999;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 400;
+            z-index: 10;
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                        color 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                        letter-spacing 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .envelope-wrapper:hover .hint-text {
+            color: #222;
+            letter-spacing: 6px;
+            transform: translateY(-2px);
+        }
+
+        .envelope-wrapper.open .hint-text {
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="envelope-wrapper" onclick="toggleEnvelope()">
+        <div class="envelope-container">
+            
+            <img src="envelope-base.jpg" alt="Envelope Base" class="envelope-base">
+            
+            <!-- Shadow layer rendered between Base and Lid -->
+            <div class="lid-shadow-container">
+                <img src="envelope-lid-aligned.png" alt="Envelope Lid Shadow" class="envelope-lid-shadow">
+            </div>
+            
+            <div class="lid-container">
+                <img src="envelope-lid-aligned.png" alt="Envelope Lid" class="envelope-lid">
+            </div>
+
+        </div>
+        
+        <div class="hint-text">Click to view</div>
+    </section>
+
+    <script>
+        function toggleEnvelope() {
+            const envelope = document.querySelector('.envelope-wrapper');
+            envelope.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
