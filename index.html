@@ -934,4 +934,40 @@
                     acceptCircle.className = 'relative h-4 w-4 rounded-full border transition-all border-forest-deep/40';
                     acceptCircle.innerHTML = '';
                 }
-      
+            }
+
+            acceptRadio.addEventListener('change', updateRadioStyles);
+            declineRadio.addEventListener('change', updateRadioStyles);
+            updateRadioStyles(); // Initial state setup
+
+            /* --- RSVP FORM SUBMISSION --- */
+            const toast = document.getElementById('toast');
+            
+            rsvpForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('rsvp-name').value;
+                const message = document.getElementById('rsvp-message').value;
+                const attending = acceptRadio.checked ? "Yes" : "No";
+                
+                // Save locally to localStorage so the RSVPs persist in the user's browser
+                const rsvps = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
+                rsvps.push({ name, message, attending, date: new Date().toISOString() });
+                localStorage.setItem('wedding_rsvps', JSON.stringify(rsvps));
+                
+                // Trigger toast notification
+                toast.textContent = attending === "Yes" ? "RSVP Confirmed! See you there." : "RSVP Received! Sorry you can't make it.";
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 4000);
+                
+                // Reset form
+                rsvpForm.reset();
+                updateRadioStyles();
+            });
+        });
+    </script>
+</body>
+</html>
