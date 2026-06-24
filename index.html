@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="styles.css"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&amp;family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&amp;family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Special+Elite&amp;family=IM+Fell+English+SC&amp;family=Outfit:wght@300;400;500&amp;display=swap"/>
     
+    <!-- GSAP & ScrollTrigger for elegant hardware-accelerated mobile/desktop pinning parallax effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
     <title>Shihana &amp; Shalan — The Wedding Times</title>
     
     <!-- SEO Meta Tags -->
@@ -30,9 +34,39 @@
         }
 
         /* --- ENVELOPE ENTRY TRANSITIONS & VARIABLES --- */
+        :root {
+            /* Fallback colors for older Safari/iOS versions without OKLCH support */
+            --paper: #f4efe7;
+            --paper-deep: #eae1d2;
+            --ink: #2b2b2b;
+            --ink-soft: #4f4a46;
+            --forest: #224b37;
+            --forest-deep: #143224;
+            --forest-soft: #3f6e56;
+            --rust: #d99166;
+            --rust-soft: #e4aa87;
+            --rule: rgba(45, 41, 39, 0.55);
+        }
+
+        @supports (color: oklch(0% 0 0)) {
+            :root {
+                --paper: oklch(94.5% .022 85);
+                --paper-deep: oklch(90.5% .032 82);
+                --ink: oklch(18% .012 80);
+                --ink-soft: oklch(32% .014 80);
+                --forest: oklch(32% .055 155);
+                --forest-deep: oklch(20% .045 158);
+                --forest-soft: oklch(45% .06 152);
+                --rust: oklch(74% .135 78);
+                --rust-soft: oklch(82% .1 82);
+                --rule: oklch(30% .02 80/.55);
+            }
+        }
+
         body.locked {
             overflow: hidden !important;
             height: 100vh !important;
+            height: 100dvh !important;
             background-color: #3c2422 !important;
         }
 
@@ -43,6 +77,7 @@
             left: 0;
             width: 100%;
             height: 100%;
+            height: 100dvh;
             background-color: #3c2422;
             display: flex;
             align-items: center;
@@ -51,6 +86,7 @@
             cursor: pointer;
             z-index: 99999;
             transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            touch-action: none; /* Prevents scroll gestures on iOS Safari */
         }
 
         .envelope-wrapper.fade-out {
@@ -64,7 +100,9 @@
             left: 0;
             width: 100vw;
             height: 100vh;
+            height: 100dvh;
             transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d; /* Safari compatibility */
         }
 
         /* --- ENVELOPE IMAGES (BASE & LID) --- */
@@ -97,6 +135,7 @@
             z-index: 2; /* Between base (1) and lid (3) */
             transform-origin: 50% 0%;
             transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d; /* Safari compatibility */
             transform: translateZ(-1px); /* Flat, just in front of base */
             pointer-events: none;
         }
@@ -114,10 +153,10 @@
             transform-origin: 50% 0%;
             transform: translateY(0px) scaleY(1);
             
-            /* Synchronized transition with the lid container */
-            transition: transform 2.8s cubic-bezier(0.22, 1, 0.36, 1),
-                        filter 2.8s cubic-bezier(0.22, 1, 0.36, 1),
-                        opacity 2.8s cubic-bezier(0.22, 1, 0.36, 1);
+            /* Synchronized transition with the lid container (reduced by 1.5s) */
+            transition: transform 3.3s cubic-bezier(0.22, 1, 0.36, 1),
+                        filter 3.3s cubic-bezier(0.22, 1, 0.36, 1),
+                        opacity 3.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         /* --- THE ROTATING LID LAYER --- */
@@ -130,10 +169,11 @@
             z-index: 3;
             transform-origin: 50% 0%; /* Keeps the rotation hinge exactly at the top edge */
             transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d; /* Safari compatibility */
             transform: translateZ(2px);
             
-            /* Slower, ultra-smooth cubic-bezier transition for an elegant look */
-            transition: transform 7.8s cubic-bezier(0.22, 1, 0.36, 1);
+            /* Slower, ultra-smooth cubic-bezier transition for an elegant look (reduced by 1.5s) */
+            transition: transform 8.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .envelope-lid {
@@ -292,24 +332,53 @@
             }
         }
 
-        /* Prevent text selection and image dragging to protect source/content */
-        body {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-        
-        input, textarea {
-            -webkit-user-select: text !important;
-            -moz-user-select: text !important;
-            -ms-user-select: text !important;
-            user-select: text !important;
+        /* Parallax rollup reveal effect (Location section gets pinned by GSAP, Countdown and below roll over it) */
+        /* Designed to be fully compatible and hardware-accelerated on Apple Safari/iOS */
+        .section-schedule {
+            position: relative;
+            z-index: 10;
         }
 
-        img {
-            -webkit-user-drag: none;
-            user-drag: none;
+        .section-countdown {
+            position: relative;
+            z-index: 20;
+            background-color: var(--paper) !important;
+            box-shadow: 0 -15px 30px -10px rgba(20, 55, 30, 0.08);
+        }
+
+        .section-footer-wrapper {
+            position: relative;
+            z-index: 20;
+            background-color: var(--paper) !important;
+        }
+
+        .section-invitation {
+            position: relative;
+            z-index: 20;
+            background-color: var(--paper) !important;
+        }
+
+        .section-hero {
+            position: relative;
+            z-index: 20;
+            background-color: var(--paper) !important;
+        }
+
+        /* RSVP Input typing lines (Transparent background with a solid bottom writing line) */
+        #rsvp-form input[type="text"],
+        #rsvp-form textarea {
+            background-color: transparent !important;
+            border-bottom: 2px solid rgba(20, 55, 30, 0.6) !important;
+            border-top: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            border-radius: 0 !important;
+            padding-left: 4px !important;
+            padding-right: 4px !important;
+        }
+        #rsvp-form input[type="text"]:focus,
+        #rsvp-form textarea:focus {
+            border-bottom-color: var(--forest-deep) !important;
         }
     </style>
 </head>
@@ -569,7 +638,6 @@
                 <div class="relative overflow-hidden newsprint-shadow border" style="border-color: rgba(20, 55, 30, 0.18);">
                     <!-- Background: warm paper tone + barely-there horizontal grain for coupon texture -->
                     <div class="absolute inset-0" style="background-color: var(--paper-deep);"></div>
-                    <div class="absolute inset-0 pointer-events-none" style="opacity:0.008; background-image:repeating-linear-gradient(0deg, rgba(0,0,0,0.6) 0 1px, transparent 1px 5px);"></div>
 
                     <span class="absolute top-3 left-3 w-5 h-5 border-t border-l" style="border-color: rgba(20, 55, 30, 0.3);"></span>
                     <span class="absolute top-3 right-3 w-5 h-5 border-t border-r" style="border-color: rgba(20, 55, 30, 0.3);"></span>
@@ -594,12 +662,12 @@
                             <form id="rsvp-form" class="mt-9 text-left space-y-7">
                                 <div>
                                     <label class="font-stamp tracking-[0.3em] text-[11px] font-bold uppercase text-forest-deep rsvp-text-readable">Your Name</label>
-                                    <input type="text" id="rsvp-name" name="name" required class="mt-2 w-full bg-[var(--paper-deep)] px-2 border-b-2 border-forest-deep/50 focus:border-forest-deep outline-none text-forest-deep font-headline font-semibold text-lg py-2 transition-colors placeholder:text-forest-deep/50" />
+                                    <input type="text" id="rsvp-name" name="name" required class="mt-2 w-full bg-transparent px-2 border-b-2 border-forest-deep/50 focus:border-forest-deep outline-none text-forest-deep font-headline font-semibold text-lg py-2 transition-colors placeholder:text-forest-deep/50" />
                                 </div>
 
                                 <div>
                                     <label class="font-stamp tracking-[0.3em] text-[11px] font-bold uppercase text-forest-deep rsvp-text-readable">Your Message</label>
-                                    <textarea id="rsvp-message" name="message" rows="2" class="mt-2 w-full bg-[var(--paper-deep)] px-2 border-b-2 border-forest-deep/50 focus:border-forest-deep outline-none text-forest-deep font-headline font-semibold text-base py-2 resize-none transition-colors"></textarea>
+                                    <textarea id="rsvp-message" name="message" rows="2" class="mt-2 w-full bg-transparent px-2 border-b-2 border-forest-deep/50 focus:border-forest-deep outline-none text-forest-deep font-headline font-semibold text-base py-2 resize-none transition-colors"></textarea>
                                 </div>
 
                                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 pt-2">
@@ -686,6 +754,20 @@
     <div id="toast">RSVP Submitted! Thank you.</div>
 
     <script>
+        // Initialize GSAP Parallax pinning (pins location, countdown rolls over it)
+        function initGSAPParallax() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Pin the location section (section-schedule) when it hits top of viewport
+            ScrollTrigger.create({
+                trigger: ".section-schedule",
+                start: "top top",
+                pin: true,
+                pinSpacing: false,
+                zIndex: 10
+            });
+        }
+
         // Trigger envelope unfolding and main website reveal
         function toggleEnvelope() {
             const envelope = document.querySelector('.envelope-wrapper');
@@ -696,7 +778,7 @@
             // 1. Open the envelope (15-degree rotation, synchronizes shadows)
             envelope.classList.add('open');
             
-            // 2. When lid is 9% open (700ms into the 7.8s transition), trigger the smooth fade reveal
+            // 2. When lid is open (1200ms into the 8.3s transition), trigger the smooth fade reveal
             setTimeout(() => {
                 // Fade out envelope wrapper
                 envelope.classList.add('fade-out');
@@ -706,6 +788,11 @@
                 
                 // Display and fade in main invitation site
                 mainContent.style.display = 'block';
+                
+                // Initialize GSAP once section displays block
+                setTimeout(() => {
+                    initGSAPParallax();
+                }, 100);
                 
                 setTimeout(() => {
                     mainContent.style.opacity = '1';
@@ -730,9 +817,10 @@
                 // Completely hide envelope wrapper from layout tree after fade transition ends (1.2s)
                 setTimeout(() => {
                     envelope.style.display = 'none';
+                    ScrollTrigger.refresh(); // Recalculate ScrollTrigger offsets once envelope layout is removed
                 }, 1200);
                 
-            }, 700); // 700ms is exactly 9% of 7.8s
+            }, 1200); // 1200ms allows the lid to open before fading out
         }
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -846,85 +934,4 @@
                     acceptCircle.className = 'relative h-4 w-4 rounded-full border transition-all border-forest-deep/40';
                     acceptCircle.innerHTML = '';
                 }
-            }
-
-            acceptRadio.addEventListener('change', updateRadioStyles);
-            declineRadio.addEventListener('change', updateRadioStyles);
-            updateRadioStyles(); // Initial state setup
-
-            /* --- RSVP FORM SUBMISSION --- */
-            const toast = document.getElementById('toast');
-            
-            rsvpForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                const name = document.getElementById('rsvp-name').value;
-                const message = document.getElementById('rsvp-message').value;
-                const attending = acceptRadio.checked ? "Yes" : "No";
-                
-                // Save locally to localStorage so the RSVPs persist in the user's browser
-                const rsvps = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
-                rsvps.push({ name, message, attending, date: new Date().toISOString() });
-                localStorage.setItem('wedding_rsvps', JSON.stringify(rsvps));
-                
-                // Trigger toast notification
-                toast.textContent = attending === "Yes" ? "RSVP Confirmed! See you there." : "RSVP Received! Sorry you can't make it.";
-                toast.classList.add('show');
-                
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 4000);
-                
-                // Reset form
-                rsvpForm.reset();
-                updateRadioStyles();
-            });
-        });
-
-        // Prevent copying, selecting text, and inspect element tools
-        (function() {
-            // Disable right click
-            document.addEventListener('contextmenu', e => e.preventDefault());
-
-            // Disable developer keys (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S)
-            document.addEventListener('keydown', e => {
-                if (e.keyCode === 123) { // F12
-                    e.preventDefault();
-                    return false;
-                }
-                if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) { // Ctrl+Shift+I/J/C
-                    e.preventDefault();
-                    return false;
-                }
-                if (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83)) { // Ctrl+U or Ctrl+S
-                    e.preventDefault();
-                    return false;
-                }
-            });
-
-            // Prevent drag and drop of images
-            document.addEventListener('dragstart', e => {
-                if (e.target.nodeName === 'IMG') {
-                    e.preventDefault();
-                }
-            });
-
-            // Prevent copying/cutting from document, excluding inputs/textareas
-            document.addEventListener('copy', e => {
-                const activeEl = document.activeElement;
-                if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
-                    return; // Allow copy inside text fields
-                }
-                e.preventDefault();
-            });
-            document.addEventListener('cut', e => {
-                const activeEl = document.activeElement;
-                if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA')) {
-                    return;
-                }
-                e.preventDefault();
-            });
-        })();
-    </script>
-</body>
-</html>
+      
