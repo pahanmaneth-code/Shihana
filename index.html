@@ -217,6 +217,13 @@
             .section-countdown {
                 max-width: 1100px !important;
             }
+
+            /* Hero section: remove narrow 680px cap — spread full newspaper width */
+            .section-hero {
+                max-width: 1100px !important;
+                padding-left: 24px !important;
+                padding-right: 24px !important;
+            }
             
             .section-hero-grid {
                 display: grid !important;
@@ -259,18 +266,29 @@
             }
         }
         
+        /* RSVP section text emphasis — bold + subtle shadow, no color stroke */
         .rsvp-text-readable {
-            text-shadow: 
-                0.5px 0.5px 0 var(--paper-deep),
-                -0.5px -0.5px 0 var(--paper-deep),
-                0.5px -0.5px 0 var(--paper-deep),
-                -0.5px 0.5px 0 var(--paper-deep);
+            font-weight: 700;
+            filter: drop-shadow(0 1px 2px rgba(20, 55, 30, 0.18));
+        }
+
+        /* Hero section: fills full viewport width, max-width only on very large screens */
+        .section-hero {
+            max-width: 100%;
+        }
+        @media (min-width: 1440px) {
+            .section-hero {
+                max-width: 1400px;
+            }
         }
 
         /* Mobile adjustments for the 3D Envelope */
         @media (max-width: 768px) {
             .envelope-container {
                 transform: translateY(-12vh);
+            }
+            .envelope-base {
+                transform: translateY(12vh) translateZ(-2px);
             }
         }
 
@@ -317,15 +335,15 @@
     <!-- Main Broadside Website Content (Initially hidden for entrance fade reveal) -->
     <main class="relative w-full overflow-x-hidden text-ink" style="display: none; opacity: 0;">
         <!-- Section 1: Broadside Masthead -->
-        <section class="section-hero relative mx-auto max-w-[680px] px-4 sm:px-8 pt-6 pb-10">
+        <section class="section-hero relative mx-auto w-full px-4 sm:px-8 pt-6 pb-10">
             <div class="paper-grain paper-edge bg-paper/70 px-4 sm:px-8 pt-6 pb-8 newsprint-shadow border border-forest-deep/30">
                 <div class="flex items-center justify-between text-[10px] sm:text-xs font-stamp tracking-[0.25em] text-ink-soft uppercase" style="opacity:0; transform:translateY(10px)">
                     <span>Vol. I</span>
                     <span>Est. MMXXVI</span>
                     <span>No. 01</span>
                 </div>
-                <!-- Enlarged heading per user request (clamp max increased from 4.5rem to 5.5rem, viewport scaling increased from 11vw to 13vw) -->
-                <h1 class="font-masthead text-forest-deep text-center leading-[0.9] mt-3" style="font-size:clamp(2.8rem, 13vw, 5.5rem); opacity:0; letter-spacing:0.4em; transform:translateY(-20px)">
+                <!-- Enlarged heading per user request -->
+                <h1 class="font-masthead text-forest-deep text-center leading-[0.9] mt-3" style="font-size:clamp(2.8rem, 7vw, 5.5rem); opacity:0; letter-spacing:0.4em; transform:translateY(-20px)">
                     The Wedding Times
                 </h1>
                 <div class="mt-4 rule-double py-2 flex items-center justify-between font-stamp text-[10px] sm:text-xs tracking-[0.2em] uppercase text-ink" style="opacity:0; transform:translateY(10px)">
@@ -338,14 +356,14 @@
                 <div class="section-hero-grid mt-6">
                     <div class="text-center" style="opacity:0; transform:translateY(24px)">
                         <p class="font-smallcaps tracking-[0.3em] text-[10px] sm:text-xs text-forest-deep mb-2">— Special Edition —</p>
-                        <h2 class="font-headline font-black text-ink leading-[1.05]" style="font-size:clamp(1.9rem, 8.5vw, 3rem)">
+                        <h2 class="font-headline font-black text-forest-deep leading-[1.05]" style="font-size:clamp(1.9rem, 8.5vw, 3rem)">
                             SHIHANA <span class="font-italic italic font-normal text-forest-deep">&amp;</span> SHALAN
                         </h2>
                         <p class="font-headline italic text-ink-soft mt-2" style="font-size:clamp(1.05rem, 4.5vw, 1.4rem)">
                             are getting married!
                         </p>
                     </div>
-                    <div class="mx-auto max-w-[280px] my-6 lg:my-0" style="opacity:0; transform:translateY(24px)">
+                    <div class="mx-auto max-w-[280px] lg:max-w-[360px] my-6 lg:my-0" style="opacity:0; transform:translateY(24px)">
                         <img src="couple.png" alt="Bride and groom illustration" class="w-full h-auto mix-blend-multiply" style="filter:contrast(1.05) saturate(0)"/>
                     </div>
                 </div>
@@ -376,7 +394,7 @@
                             <span class="h-px flex-1 bg-forest-deep/40 max-w-[60px]"></span>
                         </div>
                         <h3 class="text-center font-headline font-bold tracking-tight text-forest-deep" style="font-size:clamp(1.5rem, 6vw, 2.1rem)">
-                            Join Us for the<br/><span class="font-italic italic font-medium text-ink">Celebration of Love</span>
+                            Join Us for the<br/><span class="font-italic italic font-medium text-forest-deep">Celebration of Love</span>
                         </h3>
                         <div class="flex items-center justify-center gap-3 text-forest-deep mt-5">
                             <span class="h-px w-10 bg-forest-deep/60"></span>
@@ -408,11 +426,11 @@
                     <div class="mt-8 grid grid-cols-2 gap-6 text-center" style="opacity:0; transform:translateY(24px)">
                         <div class="rule-top pt-4">
                             <p class="font-stamp tracking-[0.25em] text-[10px] text-forest-deep uppercase">Daughter of</p>
-                            <p class="font-headline mt-2 text-[15px] leading-snug">Mr. &amp; Mrs.<br/><span class="font-bold">Mark Anton</span></p>
+                            <p class="font-headline mt-2 text-[15px] leading-snug">Mr. &amp; Mrs.<br/><span class="font-bold text-forest-deep">Mark Anton</span></p>
                         </div>
                         <div class="rule-top pt-4">
                             <p class="font-stamp tracking-[0.25em] text-[10px] text-forest-deep uppercase">Son of</p>
-                            <p class="font-headline mt-2 text-[15px] leading-snug">Mr. &amp; Mrs.<br/><span class="font-bold">Hettige</span></p>
+                            <p class="font-headline mt-2 text-[15px] leading-snug">Mr. &amp; Mrs.<br/><span class="font-bold text-forest-deep">Hettige</span></p>
                         </div>
                     </div>
                 </div>
@@ -452,7 +470,7 @@
                             </svg>
                             <div class="flex-1">
                                 <p class="font-stamp tracking-[0.3em] text-[10px] text-forest-deep uppercase">Wedding Ceremony · 4:00 PM</p>
-                                <h4 class="font-headline font-bold text-[20px] sm:text-2xl mt-1 leading-tight">All Saints' Church</h4>
+                                <h4 class="font-headline font-bold text-forest-deep text-[20px] sm:text-2xl mt-1 leading-tight">All Saints' Church</h4>
                                 <p class="font-serif italic text-ink-soft text-sm mt-1">No. 96, Ananda Rajakaruna Mawatha,<br/>Colombo 10</p>
                                 <a href="https://maps.google.com/?q=All+Saints+Church+Colombo+10" target="_blank" rel="noreferrer" class="inline-block mt-3 font-stamp tracking-[0.25em] text-[10px] uppercase text-forest-deep border border-forest-deep/60 px-3 py-1.5 hover:bg-forest-deep hover:text-paper transition-colors">View on Map →</a>
                             </div>
@@ -487,7 +505,7 @@
                             </svg>
                             <div class="flex-1">
                                 <p class="font-stamp tracking-[0.3em] text-[10px] text-forest-deep uppercase">Reception · 7:00 PM</p>
-                                <h4 class="font-headline font-bold text-[20px] sm:text-2xl mt-1 leading-tight">Courtyard by Marriott</h4>
+                                <h4 class="font-headline font-bold text-forest-deep text-[20px] sm:text-2xl mt-1 leading-tight">Courtyard by Marriott</h4>
                                 <p class="font-serif italic text-ink-soft text-sm mt-1">Colombo City Centre · Guest Parking: P3<br/>Banquet Hall: Grand Sapphire, 9th Floor</p>
                                 <a href="https://maps.google.com/?q=Courtyard+by+Marriott+Colombo+City+Centre" target="_blank" rel="noreferrer" class="inline-block mt-3 font-stamp tracking-[0.25em] text-[10px] uppercase text-forest-deep border border-forest-deep/60 px-3 py-1.5 hover:bg-forest-deep hover:text-paper transition-colors">View on Map →</a>
                             </div>
@@ -519,7 +537,7 @@
                     <span class="h-px flex-1 bg-forest-deep/40 max-w-[60px]"></span>
                 </div>
                 <h3 class="font-headline font-bold text-forest-deep" style="font-size:clamp(1.5rem, 6vw, 2.1rem)">
-                    Counting Down<br/><span class="font-italic italic font-medium text-ink">to Our Big Day</span>
+                    Counting Down<br/><span class="font-italic italic font-medium text-forest-deep">to Our Big Day</span>
                 </h3>
             </div>
             <div class="mt-8" style="opacity:0; transform:translateY(24px)">
@@ -549,10 +567,9 @@
             <!-- Section 5: RSVP Coupon Form (Styled with warm Theme color - Rust background instead of dark green) -->
             <section class="section-rsvp relative px-4 sm:px-8 py-14">
                 <div class="relative overflow-hidden newsprint-shadow border" style="border-color: rgba(20, 55, 30, 0.18);">
-                    <!-- Subtle paper-deep background — barely darker than the page, no colour shock -->
+                    <!-- Background: warm paper tone + barely-there horizontal grain for coupon texture -->
                     <div class="absolute inset-0" style="background-color: var(--paper-deep);"></div>
-                    <!-- Very faint grain lines matching the newspaper texture -->
-                    <div class="absolute inset-0 pointer-events-none" style="opacity:0.006; background-image:repeating-linear-gradient(0deg, var(--forest-deep) 0 1px, transparent 1px 4px);"></div>
+                    <div class="absolute inset-0 pointer-events-none" style="opacity:0.008; background-image:repeating-linear-gradient(0deg, rgba(0,0,0,0.6) 0 1px, transparent 1px 5px);"></div>
 
                     <span class="absolute top-3 left-3 w-5 h-5 border-t border-l" style="border-color: rgba(20, 55, 30, 0.3);"></span>
                     <span class="absolute top-3 right-3 w-5 h-5 border-t border-r" style="border-color: rgba(20, 55, 30, 0.3);"></span>
@@ -577,12 +594,12 @@
                             <form id="rsvp-form" class="mt-9 text-left space-y-7">
                                 <div>
                                     <label class="font-stamp tracking-[0.3em] text-[11px] font-bold uppercase text-forest-deep rsvp-text-readable">Your Name</label>
-                                    <input type="text" id="rsvp-name" name="name" required class="mt-2 w-full bg-transparent border-b border-forest-deep/35 focus:border-forest-deep outline-none text-forest-deep font-headline font-semibold text-lg py-2 transition-colors placeholder:text-forest-deep/50 rsvp-text-readable" />
+                                    <input type="text" id="rsvp-name" name="name" required class="mt-2 w-full bg-[var(--paper-deep)] px-2 border-b-2 border-forest-deep/50 focus:border-forest-deep outline-none text-forest-deep font-headline font-semibold text-lg py-2 transition-colors placeholder:text-forest-deep/50" />
                                 </div>
 
                                 <div>
                                     <label class="font-stamp tracking-[0.3em] text-[11px] font-bold uppercase text-forest-deep rsvp-text-readable">Your Message</label>
-                                    <textarea id="rsvp-message" name="message" rows="2" class="mt-2 w-full bg-transparent border-b border-forest-deep/35 focus:border-forest-deep outline-none text-forest-deep font-headline font-semibold text-base py-2 resize-none transition-colors rsvp-text-readable"></textarea>
+                                    <textarea id="rsvp-message" name="message" rows="2" class="mt-2 w-full bg-[var(--paper-deep)] px-2 border-b-2 border-forest-deep/50 focus:border-forest-deep outline-none text-forest-deep font-headline font-semibold text-base py-2 resize-none transition-colors"></textarea>
                                 </div>
 
                                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 pt-2">
@@ -628,7 +645,7 @@
                         <span class="h-px flex-1 bg-forest-deep/40 max-w-[60px]"></span>
                     </div>
                     <h3 class="font-headline font-black text-forest-deep tracking-tight" style="font-size:clamp(2rem, 9vw, 3rem)">SAVE THE DATE</h3>
-                    <p class="font-italic italic text-ink mt-2" style="font-size:clamp(1.2rem, 5.5vw, 1.6rem)">
+                    <p class="font-italic italic text-forest-deep mt-2" style="font-size:clamp(1.2rem, 5.5vw, 1.6rem)">
                         17<sup class="text-[0.6em]">th</sup> July, 2026
                     </p>
                     <div class="flex items-center justify-center gap-3 text-forest-deep mt-5">
@@ -647,11 +664,11 @@
                         <p class="font-stamp tracking-[0.3em] text-[9px] text-forest-deep uppercase text-center">For Enquiries · Coordinators</p>
                         <div class="mt-3 grid grid-cols-2 gap-3 text-center">
                             <a href="tel:+94777642699" class="block">
-                                <p class="font-headline text-[13px] font-bold text-ink leading-tight">Samith</p>
+                                <p class="font-headline text-[13px] font-bold text-forest-deep leading-tight">Samith</p>
                                 <p class="font-stamp text-[11px] tracking-wider text-ink-soft mt-0.5">+94 77 764 2699</p>
                             </a>
                             <a href="tel:+94717479017" class="block">
-                                <p class="font-headline text-[13px] font-bold text-ink leading-tight">Sameera</p>
+                                <p class="font-headline text-[13px] font-bold text-forest-deep leading-tight">Sameera</p>
                                 <p class="font-stamp text-[11px] tracking-wider text-ink-soft mt-0.5">+94 71 747 9017</p>
                             </a>
                         </div>
