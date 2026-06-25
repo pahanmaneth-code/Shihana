@@ -63,6 +63,11 @@
             }
         }
 
+        body {
+            background-color: #3c2422;
+            transition: background-color 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
         body.locked {
             overflow: hidden !important;
             height: 100vh !important;
@@ -309,7 +314,7 @@
         /* RSVP section text emphasis — bold + subtle shadow, no color stroke */
         .rsvp-text-readable {
             font-weight: 700;
-            filter: drop-shadow(0 1px 2px rgba(20, 55, 30, 0.18));
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
         }
 
         /* Hero section: fills full viewport width, max-width only on very large screens */
@@ -332,11 +337,12 @@
             }
         }
 
-        /* Parallax rollup reveal effect (Location section gets pinned by GSAP, Countdown and below roll over it) */
-        /* Designed to be fully compatible and hardware-accelerated on Apple Safari/iOS */
         .section-schedule {
             position: relative;
             z-index: 10;
+            background-color: var(--paper-deep) !important;
+            border-top: 1px solid var(--forest-deep);
+            border-bottom: 1px solid var(--forest-deep);
         }
 
         .section-countdown {
@@ -364,11 +370,18 @@
             background-color: var(--paper) !important;
         }
 
-        /* RSVP Input typing lines (Transparent background with a solid bottom writing line) */
+        /* Ensure couple illustration blend is applied immediately on load */
+        .couple-wrapper, .couple-blend {
+            mix-blend-mode: multiply !important;
+            isolation: isolate;
+        }
+        .couple-blend {
+            filter: contrast(1.05) saturate(0) !important;
+        }
         #rsvp-form input[type="text"],
         #rsvp-form textarea {
             background-color: transparent !important;
-            border-bottom: 2px solid rgba(20, 55, 30, 0.6) !important;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.45) !important;
             border-top: none !important;
             border-left: none !important;
             border-right: none !important;
@@ -378,7 +391,7 @@
         }
         #rsvp-form input[type="text"]:focus,
         #rsvp-form textarea:focus {
-            border-bottom-color: var(--forest-deep) !important;
+            border-bottom-color: #ffffff !important;
         }
     </style>
 </head>
@@ -402,7 +415,7 @@
     </section>
 
     <!-- Main Broadside Website Content (Initially hidden for entrance fade reveal) -->
-    <main class="relative w-full overflow-x-hidden text-ink" style="display: none; opacity: 0;">
+    <main class="relative w-full overflow-x-hidden text-ink" style="display: none; opacity: 0; background-color: #f4efe7;">
         <!-- Section 1: Broadside Masthead -->
         <section class="section-hero relative mx-auto w-full px-4 sm:px-8 pt-6 pb-10">
             <div class="paper-grain paper-edge bg-paper/70 px-4 sm:px-8 pt-6 pb-8 newsprint-shadow border border-forest-deep/30">
@@ -412,7 +425,7 @@
                     <span>No. 01</span>
                 </div>
                 <!-- Enlarged heading per user request -->
-                <h1 class="font-masthead text-forest-deep text-center leading-[0.9] mt-3" style="font-size:clamp(2.8rem, 7vw, 5.5rem); opacity:0; letter-spacing:0.4em; transform:translateY(-20px)">
+                <h1 class="font-masthead text-forest-deep text-center leading-[0.9] mt-3" style="font-size:clamp(2.8rem, 7vw, 5.5rem); opacity:0; letter-spacing:0; transform:translateY(-20px)">
                     The Wedding Times
                 </h1>
                 <div class="mt-4 rule-double py-2 flex items-center justify-between font-stamp text-[10px] sm:text-xs tracking-[0.2em] uppercase text-ink" style="opacity:0; transform:translateY(10px)">
@@ -425,15 +438,15 @@
                 <div class="section-hero-grid mt-6">
                     <div class="text-center" style="opacity:0; transform:translateY(24px)">
                         <p class="font-smallcaps tracking-[0.3em] text-[10px] sm:text-xs text-forest-deep mb-2">— Special Edition —</p>
-                        <h2 class="font-headline font-black text-forest-deep leading-[1.05]" style="font-size:clamp(1.9rem, 8.5vw, 3rem)">
+                        <h2 class="font-headline font-black text-forest-deep leading-[1.05]" style="font-size:clamp(1.6rem, 7vw, 2.5rem)">
                             SHIHANA <span class="font-italic italic font-normal text-forest-deep">&amp;</span> SHALAN
                         </h2>
                         <p class="font-headline italic text-ink-soft mt-2" style="font-size:clamp(1.05rem, 4.5vw, 1.4rem)">
                             are getting married!
                         </p>
                     </div>
-                    <div class="mx-auto max-w-[280px] lg:max-w-[360px] my-6 lg:my-0" style="opacity:0; transform:translateY(24px)">
-                        <img src="couple.png" alt="Bride and groom illustration" class="w-full h-auto mix-blend-multiply" style="filter:contrast(1.05) saturate(0)"/>
+                    <div class="mx-auto max-w-[280px] lg:max-w-[360px] my-6 lg:my-0 couple-wrapper" style="opacity:0; transform:translateY(24px)">
+                        <img src="couple.png" alt="Bride and groom illustration" class="couple-blend w-full h-auto"/>
                     </div>
                 </div>
 
@@ -576,6 +589,7 @@
                                 <p class="font-stamp tracking-[0.3em] text-[10px] text-forest-deep uppercase">Reception · 7:00 PM</p>
                                 <h4 class="font-headline font-bold text-forest-deep text-[20px] sm:text-2xl mt-1 leading-tight">Courtyard by Marriott</h4>
                                 <p class="font-serif italic text-ink-soft text-sm mt-1">Colombo City Centre · Guest Parking: P3<br/>Banquet Hall: Grand Sapphire, 9th Floor</p>
+                                <p class="font-stamp text-[10px] tracking-wider text-ink-soft mt-2 uppercase">Guests are required to collect a parking pass from the hotel front desk for P-3 parking</p>
                                 <a href="https://maps.google.com/?q=Courtyard+by+Marriott+Colombo+City+Centre" target="_blank" rel="noreferrer" class="inline-block mt-3 font-stamp tracking-[0.25em] text-[10px] uppercase text-forest-deep border border-forest-deep/60 px-3 py-1.5 hover:bg-forest-deep hover:text-paper transition-colors">View on Map →</a>
                             </div>
                         </div>
@@ -633,60 +647,56 @@
 
         <!-- Adaptive Wrapper for RSVP and Save the Date (Side-by-side on PC, Stacked on Mobile) -->
         <div class="section-footer-wrapper">
-            <!-- Section 5: RSVP Coupon Form (Styled with warm Theme color - Rust background instead of dark green) -->
+            <!-- Section 5: RSVP Coupon Form (Styled with warm Theme color - Ink charcoal background and cream text) -->
             <section class="section-rsvp relative px-4 sm:px-8 py-14">
-                <div class="relative overflow-hidden newsprint-shadow border" style="border-color: rgba(20, 55, 30, 0.18);">
-                    <!-- Background: warm paper tone + barely-there horizontal grain for coupon texture -->
-                    <div class="absolute inset-0" style="background-color: var(--paper-deep);"></div>
-
-                    <span class="absolute top-3 left-3 w-5 h-5 border-t border-l" style="border-color: rgba(20, 55, 30, 0.3);"></span>
-                    <span class="absolute top-3 right-3 w-5 h-5 border-t border-r" style="border-color: rgba(20, 55, 30, 0.3);"></span>
-                    <span class="absolute bottom-3 left-3 w-5 h-5 border-b border-l" style="border-color: rgba(20, 55, 30, 0.3);"></span>
-                    <span class="absolute bottom-3 right-3 w-5 h-5 border-b border-r" style="border-color: rgba(20, 55, 30, 0.3);"></span>
-
-                    <div class="relative px-6 sm:px-10 py-12 text-center">
+                <div class="relative overflow-hidden newsprint-shadow border" style="border-color: rgba(255,255,255,0.15);">
+                    <div class="relative px-6 sm:px-10 py-12 text-center" style="background-color: #231f1e; background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.035) 0 1px, transparent 1px), radial-gradient(circle at 10% 20%, rgba(255,255,255,0.02) 0 1px, transparent 1px), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.02) 0 1px, transparent 1px), repeating-linear-gradient(0deg, rgba(255,255,255,0.008) 0 1px, transparent 1px 3px), repeating-linear-gradient(90deg, rgba(255,255,255,0.008) 0 1px, transparent 1px 4px); background-size: 8px 8px, 13px 13px, 17px 17px, 3px 3px, 4px 4px;">
+                        <span class="absolute top-3 left-3 w-5 h-5 border-t border-l" style="border-color: rgba(255,255,255,0.3);"></span>
+                        <span class="absolute top-3 right-3 w-5 h-5 border-t border-r" style="border-color: rgba(255,255,255,0.3);"></span>
+                        <span class="absolute bottom-3 left-3 w-5 h-5 border-b border-l" style="border-color: rgba(255,255,255,0.3);"></span>
+                        <span class="absolute bottom-3 right-3 w-5 h-5 border-b border-r" style="border-color: rgba(255,255,255,0.3);"></span>
                         <div style="opacity:0; transform:translateY(24px)">
-                            <p class="font-headline italic tracking-[0.5em] text-forest-deep text-sm uppercase rsvp-text-readable">R S V P</p>
+                            <p class="font-headline italic tracking-[0.5em] text-paper text-sm uppercase rsvp-text-readable">R S V P</p>
                             <div class="mt-3 flex items-center justify-center gap-3">
-                                <span class="h-px w-10 bg-forest-deep/40"></span>
+                                <span class="h-px w-10 bg-paper/40"></span>
                                 <svg width="28" height="10" viewBox="0 0 28 10" fill="none" aria-hidden="true">
-                                    <path d="M1 5 C 5 1, 9 9, 14 5 C 19 1, 23 9, 27 5" stroke="currentColor" class="text-forest-deep" stroke-width="1"></path>
+                                    <path d="M1 5 C 5 1, 9 9, 14 5 C 19 1, 23 9, 27 5" stroke="currentColor" class="text-paper" stroke-width="1"></path>
                                 </svg>
-                                <span class="h-px w-10 bg-forest-deep/40"></span>
+                                <span class="h-px w-10 bg-paper/40"></span>
                             </div>
-                            <h3 class="mt-5 font-headline font-bold text-forest-deep leading-tight rsvp-text-readable" style="font-size:clamp(1.9rem, 8vw, 2.6rem);">Join Our Story</h3>
-                            <p class="mt-3 font-italic italic text-forest-deep font-bold rsvp-text-readable text-[16px]">Kindly respond by April 20<sup>th</sup>, 2026</p>
+                            <h3 class="mt-5 font-headline font-bold text-paper leading-tight rsvp-text-readable" style="font-size:clamp(1.9rem, 8vw, 2.6rem);">Join Our Story</h3>
+                            <p class="mt-3 font-italic italic text-paper font-bold rsvp-text-readable text-[16px]">Kindly respond by July 3<sup>rd</sup>, 2026</p>
                         </div>
 
                         <div style="opacity:0; transform:translateY(24px)">
                             <form id="rsvp-form" class="mt-9 text-left space-y-7">
                                 <div>
-                                    <label class="font-stamp tracking-[0.3em] text-[11px] font-bold uppercase text-forest-deep rsvp-text-readable">Your Name</label>
-                                    <input type="text" id="rsvp-name" name="name" required class="mt-2 w-full bg-transparent px-2 border-b-2 border-forest-deep/50 focus:border-forest-deep outline-none text-forest-deep font-headline font-semibold text-lg py-2 transition-colors placeholder:text-forest-deep/50" />
+                                    <label class="font-stamp tracking-[0.3em] text-[11px] font-bold uppercase text-paper rsvp-text-readable">Your Name</label>
+                                    <input type="text" id="rsvp-name" name="name" required class="mt-2 w-full bg-transparent px-2 border-b-2 border-paper/50 focus:border-paper outline-none text-paper font-headline font-semibold text-lg py-2 transition-colors placeholder:text-paper/50" />
                                 </div>
 
                                 <div>
-                                    <label class="font-stamp tracking-[0.3em] text-[11px] font-bold uppercase text-forest-deep rsvp-text-readable">Your Message</label>
-                                    <textarea id="rsvp-message" name="message" rows="2" class="mt-2 w-full bg-transparent px-2 border-b-2 border-forest-deep/50 focus:border-forest-deep outline-none text-forest-deep font-headline font-semibold text-base py-2 resize-none transition-colors"></textarea>
+                                    <label class="font-stamp tracking-[0.3em] text-[11px] font-bold uppercase text-paper rsvp-text-readable">Your Message</label>
+                                    <textarea id="rsvp-message" name="message" rows="2" class="mt-2 w-full bg-transparent px-2 border-b-2 border-paper/50 focus:border-paper outline-none text-paper font-headline font-semibold text-base py-2 resize-none transition-colors"></textarea>
                                 </div>
 
                                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 pt-2">
                                     <label class="flex items-center gap-3 cursor-pointer group">
-                                        <span class="relative h-4 w-4 rounded-full border transition-all border-forest-deep">
-                                            <span class="absolute inset-1 rounded-full bg-forest-deep"></span>
+                                        <span class="relative h-4 w-4 rounded-full border transition-all border-paper">
+                                            <span class="absolute inset-1 rounded-full bg-paper"></span>
                                         </span>
                                         <input type="radio" class="sr-only" name="attending" checked value="yes"/>
-                                        <span class="font-stamp tracking-[0.25em] text-[11px] font-bold uppercase text-forest-deep rsvp-text-readable group-hover:text-forest-deep transition-colors">Accepts</span>
+                                        <span class="font-stamp tracking-[0.25em] text-[11px] font-bold uppercase text-paper rsvp-text-readable group-hover:text-paper transition-colors">Accepts</span>
                                     </label>
                                     <label class="flex items-center gap-3 cursor-pointer group">
-                                        <span class="relative h-4 w-4 rounded-full border transition-all border-forest-deep/40"></span>
+                                        <span class="relative h-4 w-4 rounded-full border transition-all border-paper/40"></span>
                                         <input type="radio" class="sr-only" name="attending" value="no"/>
-                                        <span class="font-stamp tracking-[0.25em] text-[11px] font-bold uppercase text-forest-deep rsvp-text-readable group-hover:text-forest-deep transition-colors">Declines</span>
+                                        <span class="font-stamp tracking-[0.25em] text-[11px] font-bold uppercase text-paper rsvp-text-readable group-hover:text-paper transition-colors">Declines</span>
                                     </label>
                                 </div>
 
                                 <div class="pt-4 flex justify-center">
-                                    <button type="submit" class="relative inline-block bg-forest-deep text-paper font-stamp tracking-[0.3em] text-[11px] uppercase px-10 py-4 transition-colors" style="border: 1px solid rgba(20,55,30,0.5);">
+                                    <button type="submit" class="relative inline-block bg-paper text-forest-deep font-stamp tracking-[0.3em] text-[11px] uppercase px-10 py-4 transition-colors" style="border: 1px solid rgba(255,255,255,0.3);">
                                         Confirm Attendance
                                     </button>
                                 </div>
@@ -694,8 +704,8 @@
                         </div>
                     </div>
                     <!-- Coupon scissors -->
-                    <span class="coupon-cut-indicator cut-tl" style="position:absolute; top:10px; left:10px; pointer-events:none; color:rgba(20,55,30,0.3);">✂</span>
-                    <span class="coupon-cut-indicator cut-tr" style="position:absolute; top:10px; right:10px; pointer-events:none; color:rgba(20,55,30,0.3);">✂</span>
+                    <span class="coupon-cut-indicator cut-tl" style="position:absolute; top:10px; left:10px; pointer-events:none; color:rgba(255,255,255,0.25);">✂</span>
+                    <span class="coupon-cut-indicator cut-tr" style="position:absolute; top:10px; right:10px; pointer-events:none; color:rgba(255,255,255,0.25);">✂</span>
                 </div>
             </section>
 
@@ -708,42 +718,71 @@
                         <path d="M20 22 L24 14 L28 22 Z"></path>
                     </svg>
                     <div class="flex items-center justify-center gap-3 mb-3 mt-4">
-                        <span class="h-px flex-1 bg-forest-deep/40 max-w-[60px]"></span>
-                        <span class="font-stamp tracking-[0.4em] text-[10px] sm:text-xs text-forest-deep uppercase">Final Edition</span>
-                        <span class="h-px flex-1 bg-forest-deep/40 max-w-[60px]"></span>
+                        <span class="h-px flex-1 max-w-[60px]" style="background-color: var(--forest-deep);"></span>
+                        <span class="font-stamp tracking-[0.4em] text-[10px] sm:text-xs uppercase" style="color: var(--forest-deep);">Final Edition</span>
+                        <span class="h-px flex-1 max-w-[60px]" style="background-color: var(--forest-deep);"></span>
                     </div>
-                    <h3 class="font-headline font-black text-forest-deep tracking-tight" style="font-size:clamp(2rem, 9vw, 3rem)">SAVE THE DATE</h3>
-                    <p class="font-italic italic text-forest-deep mt-2" style="font-size:clamp(1.2rem, 5.5vw, 1.6rem)">
+                    <h3 class="font-headline font-black tracking-tight" style="font-size:clamp(2rem, 9vw, 3rem); color: var(--forest-deep);">SAVE THE DATE</h3>
+                    <p class="font-italic italic mt-2" style="font-size:clamp(1.2rem, 5.5vw, 1.6rem); color: var(--forest-deep);">
                         17<sup class="text-[0.6em]">th</sup> July, 2026
                     </p>
-                    <div class="flex items-center justify-center gap-3 text-forest-deep mt-5">
-                        <span class="h-px w-10 bg-forest-deep/60"></span>
+                    <div class="flex items-center justify-center gap-3 mt-5">
+                        <span class="h-px w-10" style="background-color: var(--forest-deep);"></span>
                         <svg width="34" height="14" viewBox="0 0 34 14" fill="none" aria-hidden="true">
                             <path d="M1 7 C 6 1, 11 13, 17 7 C 23 1, 28 13, 33 7" stroke="currentColor" stroke-width="1" fill="none"></path>
                             <circle cx="17" cy="7" r="1.6" fill="currentColor"></circle>
                         </svg>
-                        <span class="h-px w-10 bg-forest-deep/60"></span>
+                        <span class="h-px w-10" style="background-color: var(--forest-deep);"></span>
                     </div>
-                    <p class="font-stamp tracking-[0.25em] text-[10px] text-ink-soft mt-5 uppercase">With love, Shihana &amp; Shalan</p>
+                    <p class="font-stamp tracking-[0.25em] text-[10px] mt-5 uppercase" style="color: var(--forest-deep);">With love, Shihana &amp; Shalan</p>
                 </div>
                 
-                <div class="mt-10" style="opacity:0; transform:translateY(24px)">
-                    <div class="rule-top rule-bottom py-4 px-3">
-                        <p class="font-stamp tracking-[0.3em] text-[9px] text-forest-deep uppercase text-center">For Enquiries · Coordinators</p>
-                        <div class="mt-3 grid grid-cols-2 gap-3 text-center">
-                            <a href="tel:+94777642699" class="block">
-                                <p class="font-headline text-[13px] font-bold text-forest-deep leading-tight">Samith</p>
-                                <p class="font-stamp text-[11px] tracking-wider text-ink-soft mt-0.5">+94 77 764 2699</p>
-                            </a>
-                            <a href="tel:+94717479017" class="block">
-                                <p class="font-headline text-[13px] font-bold text-forest-deep leading-tight">Sameera</p>
-                                <p class="font-stamp text-[11px] tracking-wider text-ink-soft mt-0.5">+94 71 747 9017</p>
-                            </a>
+                <div class="mt-6" style="opacity:0; transform:translateY(24px)">
+                    <div class="rule-top" style="border-top-color: var(--forest-deep); padding-top: 32px; padding-bottom: 12px; padding-left: 12px; padding-right: 12px;">
+                        <p class="font-stamp tracking-[0.3em] text-[9px] uppercase text-center" style="color: var(--forest-deep);">For Enquiries · Coordinators</p>
+                    <div class="mt-3 grid grid-cols-2 gap-3 text-center">
+                        <a href="tel:+94777642699" class="block">
+                            <p class="font-headline text-[13px] font-bold leading-tight" style="color: var(--forest-deep);">Samith</p>
+                            <p class="font-stamp text-[11px] tracking-wider text-ink-soft mt-0.5">+94 77 764 2699</p>
+                        </a>
+                        <a href="tel:+94717479017" class="block">
+                            <p class="font-headline text-[13px] font-bold leading-tight" style="color: var(--forest-deep);">Sameera</p>
+                            <p class="font-stamp text-[11px] tracking-wider text-ink-soft mt-0.5">+94 71 747 9017</p>
+                        </a>
+                    </div>
+                    </div>
+                </div>
+                
+                <div class="rule-top" style="opacity:0; transform:translateY(24px); padding-top: 24px; margin-top: 20px; border-top-color: var(--forest-deep);">
+                    <p class="font-stamp tracking-[0.35em] text-[9px] text-ink-soft uppercase" style="margin-bottom: 24px;">Wedding Colour Palette</p>
+                    <div class="flex items-center justify-center gap-2 sm:gap-4">
+                        <div class="flex flex-col items-center flex-shrink-0" style="gap:2px;">
+                            <span class="block w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-md border" style="background-color: #ffffff; border-color: rgba(20, 55, 30, 0.25);"></span>
+                            <span class="font-stamp text-[8px] tracking-wider text-ink-soft uppercase" style="min-height: 24px; display: flex; align-items: center; justify-content: center; text-align: center; max-width: 65px; line-height: 1.2;">Ivory White</span>
+                        </div>
+                        <span class="font-stamp text-[8px] sm:text-[10px] text-ink-soft/40 self-center flex-shrink-0">✦</span>
+                        <div class="flex flex-col items-center flex-shrink-0" style="gap:2px;">
+                            <span class="block w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-md" style="background-color: #5c6c2c;"></span>
+                            <span class="font-stamp text-[8px] tracking-wider text-ink-soft uppercase" style="min-height: 24px; display: flex; align-items: center; justify-content: center; text-align: center; max-width: 65px; line-height: 1.2;">Olive Green</span>
+                        </div>
+                        <span class="font-stamp text-[8px] sm:text-[10px] text-ink-soft/40 self-center flex-shrink-0">✦</span>
+                        <div class="flex flex-col items-center flex-shrink-0" style="gap:2px;">
+                            <span class="block w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-md" style="background-color: #455629;"></span>
+                            <span class="font-stamp text-[8px] tracking-wider text-ink-soft uppercase" style="min-height: 24px; display: flex; align-items: center; justify-content: center; text-align: center; max-width: 65px; line-height: 1.2;">Moss Green</span>
+                        </div>
+                        <span class="font-stamp text-[8px] sm:text-[10px] text-ink-soft/40 self-center flex-shrink-0">✦</span>
+                        <div class="flex flex-col items-center flex-shrink-0" style="gap:2px;">
+                            <span class="block w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-md" style="background-color: #2f3e25;"></span>
+                            <span class="font-stamp text-[8px] tracking-wider text-ink-soft uppercase" style="min-height: 24px; display: flex; align-items: center; justify-content: center; text-align: center; max-width: 65px; line-height: 1.2;">Deep Forest</span>
                         </div>
                     </div>
+                    <div class="flex items-center justify-center gap-3 mt-10">
+                        <span class="h-px w-8" style="background-color: var(--forest-deep);"></span>
+                        <span class="font-stamp tracking-[0.3em] text-[8px] uppercase" style="color: var(--forest-deep);">The Palette That Binds Their Story</span>
+                        <span class="h-px w-8" style="background-color: var(--forest-deep);"></span>
+                    </div>
                 </div>
-                
-                <div class="mt-10 rule-top pt-4" style="opacity:0; transform:translateY(24px)">
+                <div class="mt-6 rule-top pt-4" style="opacity:0; transform:translateY(24px)">
                     <p class="font-stamp tracking-[0.25em] text-[9px] text-ink-soft uppercase">The Wedding Times · Special Edition · Printed with Love · MMXXVI</p>
                 </div>
             </section>
@@ -788,31 +827,38 @@
                 
                 // Display and fade in main invitation site
                 mainContent.style.display = 'block';
+                mainContent.style.opacity = '0';
+                mainContent.style.background = '#f4efe7';
+                mainContent.style.transition = 'none';
                 
-                // Initialize GSAP once section displays block
-                setTimeout(() => {
-                    initGSAPParallax();
-                }, 100);
+                // Force reflow - triggers style calculation and blend compositing before transition
+                void mainContent.offsetWidth;
                 
-                setTimeout(() => {
-                    mainContent.style.opacity = '1';
-                    mainContent.style.transition = 'opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1)';
-                    
-                    // Trigger Hero section entrance stagger immediately on reveal
-                    // Select hero section inside main (not the envelope wrapper section)
-                    const heroSection = mainContent.querySelector('.section-hero');
-                    const firstSectionElements = heroSection ? heroSection.querySelectorAll('[style*="opacity:0"]') : [];
+                // Initialize GSAP once section is in DOM
+                initGSAPParallax();
+                
+                // Force two animation frames so browser commits display:block + opacity:0 before transitioning
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        mainContent.style.transition = 'opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1)';
+                        mainContent.style.opacity = '1';
+                        
+                        // Trigger Hero section entrance stagger immediately on reveal
+                        // Select hero section inside main (not the envelope wrapper section)
+                        const heroSection = mainContent.querySelector('.section-hero');
+                        const firstSectionElements = heroSection ? heroSection.querySelectorAll('[style*="opacity:0"]') : [];
 
-                    firstSectionElements.forEach((el, index) => {
-                        const baseDelay = 200;
-                        const delay = baseDelay + (index * 130);
-                        setTimeout(() => {
-                            el.style.opacity = "1";
-                            el.style.transform = "none";
-                            el.style.transition = "opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1)";
-                        }, delay);
+                        firstSectionElements.forEach((el, index) => {
+                            const baseDelay = 200;
+                            const delay = baseDelay + (index * 130);
+                            setTimeout(() => {
+                                el.style.opacity = "1";
+                                el.style.transform = "none";
+                                el.style.transition = "opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1), transform 1.4s cubic-bezier(0.16, 1, 0.3, 1)";
+                            }, delay);
+                        });
                     });
-                }, 50);
+                });
                 
                 // Completely hide envelope wrapper from layout tree after fade transition ends (1.2s)
                 setTimeout(() => {
@@ -924,14 +970,14 @@
             
             function updateRadioStyles() {
                 if (acceptRadio.checked) {
-                    acceptCircle.className = 'relative h-4 w-4 rounded-full border transition-all border-forest-deep';
-                    acceptCircle.innerHTML = '<span class="absolute inset-1 rounded-full bg-forest-deep"></span>';
-                    declineCircle.className = 'relative h-4 w-4 rounded-full border transition-all border-forest-deep/40';
+                    acceptCircle.className = 'relative h-4 w-4 rounded-full border transition-all border-paper';
+                    acceptCircle.innerHTML = '<span class="absolute inset-1 rounded-full bg-paper"></span>';
+                    declineCircle.className = 'relative h-4 w-4 rounded-full border transition-all border-paper/40';
                     declineCircle.innerHTML = '';
                 } else if (declineRadio.checked) {
-                    declineCircle.className = 'relative h-4 w-4 rounded-full border transition-all border-forest-deep';
-                    declineCircle.innerHTML = '<span class="absolute inset-1 rounded-full bg-forest-deep"></span>';
-                    acceptCircle.className = 'relative h-4 w-4 rounded-full border transition-all border-forest-deep/40';
+                    declineCircle.className = 'relative h-4 w-4 rounded-full border transition-all border-paper';
+                    declineCircle.innerHTML = '<span class="absolute inset-1 rounded-full bg-paper"></span>';
+                    acceptCircle.className = 'relative h-4 w-4 rounded-full border transition-all border-paper/40';
                     acceptCircle.innerHTML = '';
                 }
             }
@@ -942,6 +988,7 @@
 
             /* --- RSVP FORM SUBMISSION --- */
             const toast = document.getElementById('toast');
+            const rsvpSubmitBtn = rsvpForm.querySelector('button[type="submit"]');
             
             rsvpForm.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -950,22 +997,78 @@
                 const message = document.getElementById('rsvp-message').value;
                 const attending = acceptRadio.checked ? "Yes" : "No";
                 
-                // Save locally to localStorage so the RSVPs persist in the user's browser
+                // Add loading state
+                const originalBtnText = rsvpSubmitBtn.textContent;
+                rsvpSubmitBtn.disabled = true;
+                rsvpSubmitBtn.textContent = "Sending...";
+                rsvpSubmitBtn.style.opacity = "0.7";
+                
+                // Get Sri Lankan localized timestamp
+                const dateOptions = {
+                    timeZone: 'Asia/Colombo',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true
+                };
+                const sriLankanDate = new Date().toLocaleString('en-US', dateOptions);
+                
+                // Save locally to localStorage as backup
                 const rsvps = JSON.parse(localStorage.getItem('wedding_rsvps') || '[]');
-                rsvps.push({ name, message, attending, date: new Date().toISOString() });
+                rsvps.push({ name, message, attending, date: sriLankanDate });
                 localStorage.setItem('wedding_rsvps', JSON.stringify(rsvps));
                 
-                // Trigger toast notification
-                toast.textContent = attending === "Yes" ? "RSVP Confirmed! See you there." : "RSVP Received! Sorry you can't make it.";
-                toast.classList.add('show');
-                
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 4000);
-                
-                // Reset form
-                rsvpForm.reset();
-                updateRadioStyles();
+                // Send to SheetDB API
+                fetch('https://sheetdb.io/api/v1/lhjzyn9h60x3d', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        data: [
+                            {
+                                name: name,
+                                attending: attending,
+                                message: message,
+                                date: sriLankanDate
+                            }
+                        ]
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Success
+                    toast.textContent = attending === "Yes" ? "RSVP Confirmed! See you there." : "RSVP Received! Sorry you can't make it.";
+                    toast.classList.add('show');
+                    
+                    // Reset form
+                    rsvpForm.reset();
+                    updateRadioStyles();
+                })
+                .catch(error => {
+                    console.error('Error submitting RSVP:', error);
+                    toast.textContent = "Error submitting RSVP. Please try again.";
+                    toast.classList.add('show');
+                })
+                .finally(() => {
+                    // Reset loading state
+                    rsvpSubmitBtn.disabled = false;
+                    rsvpSubmitBtn.textContent = originalBtnText;
+                    rsvpSubmitBtn.style.opacity = "1";
+                    
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                    }, 4000);
+                });
             });
         });
     </script>
